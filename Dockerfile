@@ -1,20 +1,20 @@
-# Use an official Python runtime as a parent image
-FROM python:3.11-slim
+# Use the official Python base image
+FROM python:3.9-slim
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Copy the requirements file into the container
+COPY requirements.txt requirements.txt
 
-# Install any needed packages specified in requirements.txt
+# Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
+# Copy the rest of the application code into the container
+COPY . .
 
-# Define environment variable
-ENV FLASK_APP=Flask_Test.py
+# Download the model (ensure this URL is correct)
+RUN python -c "import gdown; gdown.download('https://drive.google.com/file/d/10rJ8GQ-_5eq2uGh5hEk5Tio7tZ6IbHpa/view?usp=sharing', './fine_tuned_model/model.safetensors', quiet=False)"
 
-# Run app.py when the container launches
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "Flask_Test:app"]
+# Specify the command to run the application
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "Flask_Test:app"]

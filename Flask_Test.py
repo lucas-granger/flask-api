@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Replace 'YOUR_FILE_ID' with your actual file ID
-MODEL_URL = 'https://drive.google.com/file/d/10rJ8GQ-_5eq2uGh5hEk5Tio7tZ6IbHpa/view?usp=drive_link'
+MODEL_URL = 'https://drive.google.com/file/d/10rJ8GQ-_5eq2uGh5hEk5Tio7tZ6IbHpa/view?usp=sharing'
 MODEL_PATH = './fine_tuned_model/model.safetensors'
 TOKENIZER_NAME = 'gpt2'
 
