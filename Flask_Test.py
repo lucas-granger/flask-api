@@ -5,7 +5,7 @@ from flask_cors import CORS
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=['http://localhost:8080'])
 
 # Replace 'YOUR_FILE_ID' with your actual file ID
 MODEL_URL = 'https://drive.google.com/file/d/10rJ8GQ-_5eq2uGh5hEk5Tio7tZ6IbHpa/view?usp=sharing'
@@ -43,15 +43,20 @@ def home():
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    data = request.json
-    prompt = data['prompt']
-    max_length = data.get('max_length', 200)
-    
-    inputs = tokenizer.encode(prompt, return_tensors='pt')
-    outputs = model.generate(inputs, max_length=max_length, num_return_sequences=1, no_repeat_ngram_size=2)
-    generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    
-    return jsonify({'generated_text': generated_text})
+    # Your code for generating response
+    response = jsonify({'generated_text': 'Sample text'})
+    return response
+
+@app.route('/generate', methods=['OPTIONS'])
+def options():
+    # Respond to OPTIONS request (preflight)
+    headers = {
+        'Access-Control-Allow-Origin': 'http://localhost:8080',  # Replace with your frontend URL
+        'Access-Control-Allow-Methods': 'POST',
+        'Access-Control-Allow-Headers': 'Content-Type'
+    }
+    return '', 204, headers
+
 
 if __name__ == '__main__':
     app.run(debug=True)
