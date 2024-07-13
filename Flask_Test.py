@@ -14,16 +14,27 @@ TOKENIZER_NAME = 'gpt2'
 
 def download_model():
     if not os.path.exists(MODEL_PATH):
+        print("Downloading model...")
         os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
         gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
+        print("Model downloaded.")
+    else:
+        print("Model already exists.")
 
 def load_model_and_tokenizer():
     global model, tokenizer
     download_model()
-    model = GPT2LMHeadModel.from_pretrained('./fine_tuned_model', from_tf=False, torch_dtype='auto', low_cpu_mem_usage=True)
+    print("Loading tokenizer...")
     tokenizer = GPT2Tokenizer.from_pretrained(TOKENIZER_NAME)
+    print("Tokenizer loaded.")
+    
+    try:
+        print("Loading model...")
+        model = GPT2LMHeadModel.from_pretrained('./fine_tuned_model', from_tf=False, torch_dtype='auto', low_cpu_mem_usage=True)
+        print("Model loaded successfully.")
+    except Exception as e:
+        print(f"Error loading model: {e}")
 
-# Load the model and tokenizer before handling any requests
 load_model_and_tokenizer()
 
 @app.route('/')
